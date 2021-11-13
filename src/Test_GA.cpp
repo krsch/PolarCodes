@@ -2,6 +2,7 @@
 #include "../include/Exceptions.h"
 
 #include <iostream>
+#include <cstddef>
 #include <vector>
 #include <string>
 #include <fstream>

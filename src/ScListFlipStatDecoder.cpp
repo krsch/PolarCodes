@@ -1,5 +1,6 @@
 #include <sstream>
 #include <algorithm>
+#include <cmath>
 #include <iostream>
 #include "../include/ScCrcAidedDecoder.h"
 #include "../include/ScListFlipStatDecoder.h"

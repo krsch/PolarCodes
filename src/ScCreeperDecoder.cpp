@@ -1,8 +1,8 @@
-
-#include <utility>
+#include <algorithm>
+#include <cmath>
 #include <iostream>
 #include <string>
-#include <algorithm>
+#include <utility>
 
 #include "../include/ScCreeperDecoder.h"
 #include "../include/GaussianApproximation.h"
@@ -282,4 +282,3 @@ std::vector<int> ScCreeperDecoder::Decode(std::vector<double> belief) {
 
 	return result;
 }
-

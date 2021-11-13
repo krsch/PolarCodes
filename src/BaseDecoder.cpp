@@ -1,3 +1,4 @@
+#include <cmath>
 #include <functional>
 
 #include "../include/Exceptions.h"

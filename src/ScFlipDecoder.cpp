@@ -1,10 +1,10 @@
-#include <vector>
-#include <map>
-#include <unordered_map>
-#include <cmath>
-#include <string>
-#include <iostream>
 #include <algorithm>
+#include <cmath>
+#include <iostream>
+#include <map>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 #include "../include/ScCrcAidedDecoder.h"
 #include "../include/ScFlipDecoder.h"

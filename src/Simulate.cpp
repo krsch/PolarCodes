@@ -327,15 +327,8 @@ bool TryLogIntoFile(std::string filename, std::string message, bool isRewrite=fa
 }
 
 bool IsFileExists(std::string filename) {
-	FILE *file;
-	fopen_s(&file, filename.c_str(), "r");
-	if (file) {
-		fclose(file);
-		return true;
-	}
-	else {
-		return false;
-	}
+    std::ifstream f(filename);
+    return static_cast<bool>(f);
 }
 
 void LogIntoConsole(std::string message) {

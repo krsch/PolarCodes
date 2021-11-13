@@ -1,5 +1,5 @@
-
 #include <algorithm>
+#include <cmath>
 
 #include "../include/PolarCode.h"
 #include "../include/ScDecoder.h"

@@ -1,3 +1,4 @@
+#include <cmath>
 #include "../include/ScListFanoDecoder.h"
 #include "../include/GaussianApproximation.h"
 

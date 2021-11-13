@@ -1,3 +1,4 @@
+#include <cmath>
 #include "../include/PolarCode.h"
 #include "../include/ScStackOperationCounter.h"
 
