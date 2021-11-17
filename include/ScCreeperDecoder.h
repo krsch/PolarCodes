@@ -12,9 +12,9 @@ protected:
 	double _delta;
 
 	// nodes as pair of (bit number, bit value)
-        std::deque<std::pair<int, int>> _NP;
-        std::deque<double> _TP;
-        std::deque<bool> _F;
+	std::deque<std::pair<int, int>> _NP;
+	std::deque<double> _TP;
+	std::deque<bool> _F;
 
 	vector<int> _path;
 	vector<double> _metric;

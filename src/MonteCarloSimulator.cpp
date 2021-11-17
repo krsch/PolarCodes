@@ -115,7 +115,7 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 
 		decoded = _decoderPtr->Decode(channelOuput);
 		//try {
-		//	
+		//
 		//}
 		//catch (std::exception e) {
 		//	std::string filename = "results/Creeper.debug";
