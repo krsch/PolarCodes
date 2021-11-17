@@ -1,17 +1,17 @@
 #include <random>
+#include <algorithm>
 #include <string>
 #include <fstream>
 #include <chrono>
-#include <exception>
-#include "../include/OperationsCount.h"
-#include "../include/CommonTransformations.h"
-#include "../include/SimulationParameters.h"
-#include "../include/MonteCarloSimulator.h"
-#include "../include/ScFanoDecoder.h"
-#include "../include/ScDecoder.h"
-#include "../include/ScListDecoder.h"
-#include "../include/ScStackDecoder.h"
-#include "../include/ScFanoDecoder.h"
+#include "OperationsCount.h"
+#include "CommonTransformations.h"
+#include "SimulationParameters.h"
+#include "MonteCarloSimulator.h"
+#include "ScFanoDecoder.h"
+#include "ScDecoder.h"
+#include "ScListDecoder.h"
+#include "ScStackDecoder.h"
+#include "ScFanoDecoder.h"
 
 MonteCarloSimulator::MonteCarloSimulator(int maxTestsCount,
 	int maxRejectionsCount,
@@ -90,7 +90,7 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 	std::vector<double> channelOuput1(n, 0);
 	std::vector<int> parallelDecoded;
 	size_t m = _codePtr->m();
-	PolarCode * parallelCodePtr = new PolarCode(m, k, ReadSequenceFromFileParallel("C:\\Users\\ische\\source\\repos\\PolarCodes\\polar_sequences\\" + std::to_string(n) + ".txt"), _codePtr->CrcPoly());
+	PolarCode * parallelCodePtr = new PolarCode(m, k, ReadSequenceFromFileParallel("polar_sequences/" + std::to_string(n) + ".txt"), _codePtr->CrcPoly());
 	ScFanoDecoder parallelDecoder(parallelCodePtr, 0.0, 1);
 	//////
 #endif // PARALLEL_DECODER
@@ -118,7 +118,7 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 		//	
 		//}
 		//catch (std::exception e) {
-		//	std::string filename = "C:\\Users\\ische\\source\\repos\\PolarCodes\\results\\Creeper.debug";
+		//	std::string filename = "results/Creeper.debug";
 		//	DumpInfo(filename, VecToStr<double>(channelOuput));
 		//	//break;
 		//}
@@ -132,7 +132,7 @@ SimulationIterationResults MonteCarloSimulator::Run(double snr)
 		if (word != decoded && parallelDecoded == word) {
 			std::cout << "Find" << std::endl;
 			std::string debugInfo = parallelDecoder.GetPathInfo();
-			std::string filename = "C:\\Users\\ische\\source\\repos\\PolarCodes\\results\\dump_SCS1.debug";
+			std::string filename = "results/dump_SCS1.debug";
 			DumpInfo(filename, VecToStr<double>(channelOuput));
 			DumpInfo(filename, VecToStr<int>(word));
 			DumpInfo(filename, VecToStr<int>(decoded));

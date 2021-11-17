@@ -1,23 +1,20 @@
 #pragma once
 
-#include <deque>
-
 #include "BaseDecoder.h"
 #include "ScOptimized.h"
-
-using std::vector;
-using std::deque;
-using std::pair;
+#include <deque>
+#include <utility>
+#include <vector>
 
 class ScCreeperDecoder : public ScOptimizedDecoder {
 
-protected:;
+protected:
 	double _delta;
 
 	// nodes as pair of (bit number, bit value)
-	deque<pair<int, int>> _NP;
-	deque<double> _TP;
-	deque<bool> _F;
+        std::deque<std::pair<int, int>> _NP;
+        std::deque<double> _TP;
+        std::deque<bool> _F;
 
 	vector<int> _path;
 	vector<double> _metric;
@@ -31,5 +28,5 @@ public:
 
 	std::vector<int> Decode(std::vector<double> llr) override;
 
-	~ScCreeperDecoder() {};
+	~ScCreeperDecoder() = default;
 };

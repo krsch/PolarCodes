@@ -97,7 +97,7 @@ std::vector<int> ScCreeperDecoder::Decode(std::vector<double> belief) {
 	double max_temp = 0.0;
 	int phi = 0;
 	int next_bit = 0;
-	pair<int, int> n_current = { 0, 0 };
+        std::pair<int, int> n_current = { 0, 0 };
 	int iterationsCount = 0;
 	vector<vector<int>> haveNotPassedCRC;
 
@@ -128,7 +128,7 @@ std::vector<int> ScCreeperDecoder::Decode(std::vector<double> belief) {
 	_F.push_front(true);
 
 	// root node
-	pair<int, int> root = make_pair(DUMMY_LENGTH, 0);
+        std::pair<int, int> root = make_pair(DUMMY_LENGTH, 0);
 	_NP.push_front(root);
 	_TP.push_front(0.0);
 	_F.push_front(true);

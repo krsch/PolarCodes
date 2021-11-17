@@ -37,4 +37,21 @@ add_executable(
   Test_CRC.cpp
   Test_GA.cpp
   Test_ScTreeMaker.cpp)
-target_link_libraries(main PUBLIC default)
+target_include_directories(main PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/../include")
+target_link_libraries(main PUBLIC default mexbind0x::mexbind0x)
+
+if(Matlab_FOUND)
+  matlab_add_mex(
+    NAME polar_decoder R2017b
+    SRC ScCreeperDecoder.cpp
+        mex.cpp
+        ScOptimized.cpp
+        BaseDecoder.cpp
+        PolarCode.cpp
+        GaussianApproximation.cpp
+        CommonTransformations.cpp
+        CRC.cpp
+    LINK_TO mexbind0x::mexbind0x default)
+  target_include_directories(polar_decoder
+                             PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/../include")
+endif()

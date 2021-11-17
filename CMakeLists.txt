@@ -13,4 +13,10 @@ set_project_warnings(default)
 option(DOMAIN_LLR "Use LLR domain, not P1 domain" ON)
 target_compile_definitions(default INTERFACE $<IF:$<BOOL:${DOMAIN_LLR}>,DOMAIN_LLR=1,DOMAIN_P1=1>)
 
+find_package(Matlab COMPONENTS MX_LIBRARY)
+if(Matlab_FOUND)
+    add_subdirectory(lib/mexbind0x)
+endif()
+
+
 add_subdirectory(src)

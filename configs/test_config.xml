@@ -16,7 +16,7 @@
       <Code type="Polar">
         <Param name="m">5</Param>
         <Param name="k">16</Param>
-        <Param name="sequenceFile">C:\Users\ische\source\repos\PolarCodes\polar_sequences\32.txt</Param>
+        <Param name="sequenceFile">polar_sequences/32.txt</Param>
         <Param name="CRC1">100000000000000001100011</Param>
         <Param name="CRC1">1000000000000101</Param>
         <Param name="CRC12">100000001111</Param>

@@ -53,17 +53,18 @@ PolarCode::PolarCode(int m, int k, std::vector<int> reliabilitySequence, std::ve
 }
 
 // CRC is not supported yet
-PolarCode::PolarCode(int m, std::vector<int> usedBits) {
+PolarCode::PolarCode(int m, std::vector<int> usedBits) 
+    : _m(static_cast<size_t>(m)), _N(1<< _m), _bitsMask(_N), _maskWithCrc(_N)
+{
 	_crcPoly = {};
 	_crcDeg = 0;
 
-	_m = m;
 	_k_extended = _k = usedBits.size();
-	_N = 1 << _m;
 
-	_bitsMask = std::vector<int>(_N, 0);
-	for (size_t i = 0; i < _k; i++)
+	for (size_t i = 0; i < _k; i++) {
 		_bitsMask[usedBits[i]] = 1;
+		_maskWithCrc[usedBits[i]] = 1;
+        }
 
 	_unfrozenPolarSequence = usedBits;
 	_unfrozenBits = _unfrozenPolarSequence;
