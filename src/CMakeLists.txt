@@ -46,6 +46,12 @@ if(Matlab_FOUND)
     SRC ScCreeperDecoder.cpp
         mex.cpp
         ScOptimized.cpp
+        ScStackOptimizedDecoder.cpp
+        ScFlipFanoDecoder.cpp
+        ScFanoDecoder.cpp
+        ScDecoder.cpp
+        ScCrcAidedDecoder.cpp
+        ScStackDecoder.cpp
         BaseDecoder.cpp
         PolarCode.cpp
         GaussianApproximation.cpp
@@ -55,3 +61,24 @@ if(Matlab_FOUND)
   target_include_directories(polar_decoder
                              PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/../include")
 endif()
+
+add_executable(
+  test_creeper
+  test_creeper.cpp
+    ScCreeperDecoder.cpp
+        ScOptimized.cpp
+        ScStackOptimizedDecoder.cpp
+        ScFlipFanoDecoder.cpp
+        ScFanoDecoder.cpp
+        ScDecoder.cpp
+        ScCrcAidedDecoder.cpp
+        ScStackDecoder.cpp
+        BaseDecoder.cpp
+        PolarCode.cpp
+        GaussianApproximation.cpp
+        CommonTransformations.cpp
+        CRC.cpp
+        )
+
+target_link_libraries(test_creeper PUBLIC default)
+target_include_directories(test_creeper PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/../include")

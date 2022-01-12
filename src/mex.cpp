@@ -1,5 +1,5 @@
-#include "BaseDecoder.h"
 #include "PolarCode.h"
+#include "BaseDecoder.h"
 #include "ScCreeperDecoder.h"
 #include "ScDecoder.h"
 #include "ScFanoDecoder.h"
