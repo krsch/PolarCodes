@@ -52,11 +52,13 @@ void ScCreeperDecoder::recursively_calc_alpha_creeper(size_t lambda, size_t phi,
 
 double ScCreeperDecoder::calculate_step_metric_fano(double belief, int decision, double pe) {
 #ifdef DOMAIN_LLR
-	double p1 = LlrToP1(belief);
-	double p0 = 1 - p1;
-	double abs = fabs(belief);
+	// double p1 = LlrToP1(belief);
+	// double p0 = 1 - p1;
+	// double abs = fabs(belief);
 	//return (belief < 0 && decision == 0 || belief > 0 && decision == 1) ? -abs: 0.0;
-	return log(((decision) ? p1 : p0)) - log(1 - pe);
+	// return log(((decision) ? p1 : p0)) - log(1 - pe);
+	auto logp = LlrToLogP(belief);
+	return logp[static_cast<std::size_t>(decision)] - log(1 - pe);
 #elif DOMAIN_P1
 	double p0 = 1 - belief;
 	double p1 = belief;
