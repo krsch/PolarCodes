@@ -264,8 +264,8 @@ std::vector<int> ScCreeperDecoder::Decode(std::vector<double> belief) {
 
 		if (phi == _n - 1) {
 			// here CRC check
-			if (isFifthStep)
-				std::cout << debug << "\n";
+			/* if (isFifthStep) */
+			/* 	std::cout << debug << "\n"; */
 			break;
 		}
 
