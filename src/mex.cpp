@@ -1,5 +1,6 @@
 #include "PolarCode.h"
 #include "BaseDecoder.h"
+#include "Encoder.h"
 #include "ScCreeperDecoder.h"
 #include "ScDecoder.h"
 #include "ScFanoDecoder.h"
@@ -53,6 +54,10 @@ void mex(mexbind0x::MXCommands & m) {
 				new ScStackOptimizedDecoder(code, L, D));
 		});
 	m.on("decode", &BaseDecoder::Decode);
+	m.on("encode", [](PolarCode * code, std::vector<int> word) {
+		Encoder enc(code);
+		return enc.Encode(word);
+	});
 	m.on("get op count", [](BaseDecoder * decoder) {
 		auto op_count = decoder->GetOperationsCount();
 		return std::make_tuple(op_count.Iterations,

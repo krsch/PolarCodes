@@ -54,6 +54,7 @@ if(Matlab_FOUND)
         ScStackDecoder.cpp
         BaseDecoder.cpp
         PolarCode.cpp
+        Encoder.cpp
         GaussianApproximation.cpp
         CommonTransformations.cpp
         CRC.cpp
