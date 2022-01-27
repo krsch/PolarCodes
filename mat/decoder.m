@@ -25,7 +25,7 @@ methods
         result = polar_decoder('decode', obj.ptr, word);
     end
     function result = encode(obj, word)
-        result = polar_decoder('encode', obj.ptr, word);
+        result = polar_decoder('encode', obj.code, word);
     end
     function [Iterations, Normilizer, Sums, Muls, Comps, Xors] = op_count(obj)
         [Iterations, Normilizer, Sums, Muls, Comps, Xors] = polar_decoder('get op count', obj.ptr);
