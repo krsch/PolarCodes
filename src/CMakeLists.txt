@@ -79,6 +79,9 @@ add_executable(
         GaussianApproximation.cpp
         CommonTransformations.cpp
         CRC.cpp
+        BpskAwgnChannel.cpp
+        BaseChannel.cpp
+        Encoder.cpp
         )
 
 target_link_libraries(test_creeper PUBLIC default)
