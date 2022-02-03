@@ -8,6 +8,7 @@
 #include "../include/Exceptions.h"
 #include "../include/Domain.h"
 #include "../include/GaussianApproximation.h"
+#include <CommonTransformations.h>
 
 #define DBL_MAX 1.7976931348623158e+308 
 #define FROZEN_VALUE 0
@@ -87,13 +88,12 @@ void ScFlipFanoDecoder::DecodeFrom(int rootIndex) {
 	while (i < n)
 	{
 		PassDown(i); // get p1 metric in _beliefTree[m][i]
-		double p0 = 1 - _beliefTree[m][i];
-		double p1 = _beliefTree[m][i];
+                auto logP = LlrToLogP(_beliefTree[m][i]);
 
 		if (_maskWithCrc[i]) {
 			double previous = (i == 0) ? 0 : _metrics[i - 1];
-			double m0 = previous + log(p0 / (1 - _p[i]));
-			double m1 = previous + log(p1 / (1 - _p[i]));
+			double m0 = previous + logP[0] - log1p(-_p[i]);
+			double m1 = previous + logP[1] - log1p(-_p[i]);
 
 			double max = (m1 > m0) ? m1 : m0;
 			int argmax = (m1 > m0) ? 1 : 0;
@@ -166,7 +166,7 @@ void ScFlipFanoDecoder::DecodeFrom(int rootIndex) {
 			_uhatTree[m][i] = _x[i];
 			PassUp(i);
 
-			double currentMetric = log(p0) - log(1 - _p[i]);
+			double currentMetric = logP[0] - log1p(-_p[i]);
 			// cumulative
 			_metrics[i] = currentMetric;
 			if (i != 0)
@@ -209,7 +209,8 @@ std::vector<int> ScFlipFanoDecoder::Decode(std::vector<double> beliefs) {
 
 	for (size_t i = 0; i < k; i++)
 	{
-		_betaDifference[i] = fabs(_beliefTree[m][_A[i]] - 0.5);
+		/* _betaDifference[i] = fabs(_beliefTree[m][_A[i]] - 0.5); */
+		_betaDifference[i] = std::abs(_beliefTree[m][_A[i]]);
 	}
 	
 	for (size_t j = 0; j < _L - 1; j++)
