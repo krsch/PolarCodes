@@ -12,6 +12,7 @@
 #include "../include/Exceptions.h"
 #include "../include/Domain.h"
 #include "../include/GaussianApproximation.h"
+#include <CommonTransformations.h>
 
 #define DBL_MAX 1.7976931348623158e+308 
 #define FROZEN_VALUE 0
@@ -71,16 +72,14 @@ void ScFanoDecoder::BackwardMove(std::vector<double> & beta, std::vector<bool> &
 	}
 }
 
-std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
+std::vector<int> ScFanoDecoder::Decode(std::vector<double> inLLR) {
 	_pathTrace = "";
 
-	size_t n = inP1.size();
+	size_t n = inLLR.size();
 	size_t m = _codePtr->m();
 	size_t k = _codePtr->k();
 	for (size_t i = 0; i < n; i++)
-	{
-		_beliefTree[0][i] = inP1[i];
-	}
+		_beliefTree[0][i] = inLLR[i];
 
 	int i = 0;
 	int j = -1;
@@ -106,13 +105,16 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 	{
 		iterationsCount++;
 		PassDown(i); // get p1 metric in _beliefTree[m][i]
-		double p0 = 1 - _beliefTree[m][i];
-		double p1 = _beliefTree[m][i];
+		/* double p0 = 1 - _beliefTree[m][i]; */
+		/* double p1 = _beliefTree[m][i]; */
+                auto logP = LlrToLogP(_beliefTree[m][i]);
 		
 		if (_maskWithCrc[i]) {
 			double previous = (i == 0) ? 0 : metrics[i - 1];
-			double m0 = previous + log(p0 / (1 - _p[i]));
-			double m1 = previous + log(p1 / (1 - _p[i]));
+			/* double m0 = previous + log(p0 / (1 - _p[i])); */
+			/* double m1 = previous + log(p1 / (1 - _p[i])); */
+			double m0 = previous + logP[0] - log1p(-_p[i]);
+			double m1 = previous + logP[1] - log1p(-_p[i]);
 
 			double max = (m1 > m0) ? m1 : m0 ;
 			int argmax = (m1 > m0) ? 1 : 0;
@@ -159,7 +161,7 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 					j++;
 					// HERE trace
 					_pathTrace += std::to_string(j) + ": " + std::to_string(beta[j]) + ", right, T=" + std::to_string(T) 
-						+ ", x[i]=" + std::to_string(argmax) + ", p=" + std::to_string(argmax == 1 ? p1 : p0) + "\n";
+						+ ", x[i]=" + std::to_string(argmax) + ", p=" + std::to_string(argmax == 1 ? logP[1] : logP[0]) + "\n";
 					///////
 				}
 				else {
@@ -178,7 +180,7 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 
 						// HERE trace
 						_pathTrace += std::to_string(j) + ": " + std::to_string(beta[j]) + ", left, T=" + std::to_string(T) 
-							+ ", x[i]=" + std::to_string(argmin) + ", p=" + std::to_string(argmin == 1 ? p1 : p0) + "\n";
+							+ ", x[i]=" + std::to_string(argmin) + ", p=" + std::to_string(argmin == 1 ? logP[1] : logP[0]) + "\n";
 						///////
 					}
 					else {
@@ -216,7 +218,7 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inP1) {
 			_uhatTree[m][i] = _x[i];
 			PassUp(i);
 
-			double currentMetric = log(p0) - log(1 - _p[i]);
+			double currentMetric = logP[0] - log1p(-_p[i]);
 			// cumulative
 			metrics[i] = currentMetric;
 			if (i != 0)
