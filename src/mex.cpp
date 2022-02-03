@@ -7,16 +7,21 @@
 #include "ScFlipFanoDecoder.h"
 #include "ScStackDecoder.h"
 #include "ScStackOptimizedDecoder.h"
+#include "feexcept.h"
 #include <mex_cast.h>
 #include <mex_commands.h>
 #include <stdexcept>
 #include <tuple>
 
 void mex(mexbind0x::MXCommands & m) {
+	[[maybe_unused]] FEExcept f {};
 	m.on("free code", [](PolarCode * code) { delete code; });
 	m.on("free decoder", [](BaseDecoder * ptr) { delete ptr; });
 	m.on("code by used", [](int m, std::vector<int> usedBits) {
 		return new PolarCode(m, std::move(usedBits));
+	});
+	m.on("code by rank", [](int m, int k, std::vector<int> reliabilitySequence, std::vector<int> crcPoly) {
+		return new PolarCode(m, k, std::move(reliabilitySequence), std::move(crcPoly));
 	});
 	m.on("code by reliability",
 		[](int m, int k, std::vector<int> reliabilitySequence,

@@ -4,19 +4,25 @@ properties (Access = private)
     code;
 end
 methods
-    function obj = decoder(m, usedBits, name, varargin)
+    function obj = decoder(codeParams, name, varargin)
         % 'creeper', delta
         % 'fano', T, delta
         % 'flip fano', T, delta, approximationSnr, L
         % 'stack', L, D
         % 'stack opt', L, D
         if nargin > 0 % nargin == 0 means that we are loading object
-            obj.code = polar_decoder('code by used', m, usedBits);
+            if numel(codeParams) == 2
+                obj.code = polar_decoder('code by used', codeParams{:});
+            elseif numel(codeParams) == 4
+                obj.code = polar_decoder('code by rank', codeParams{:});
+            else
+                error 2 or 4 codeParams required
+            end
             obj.ptr = polar_decoder(['make ' name], obj.code, varargin{:});
         end
     end
     function delete(obj)
-        polar_decoder('free decoder opt', obj.ptr);
+        polar_decoder('free decoder', obj.ptr);
         polar_decoder('free code', obj.code);
         obj.code = [];
         obj.ptr = [];
