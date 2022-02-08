@@ -1,5 +1,3 @@
-#include <algorithm>
-#include <cmath>
 
 #include "../include/PolarCode.h"
 #include "../include/ScDecoder.h"
@@ -9,6 +7,10 @@
 #include "../include/Domain.h"
 #include "../include/GaussianApproximation.h"
 #include <CommonTransformations.h>
+
+#include <algorithm>
+#include <cmath>
+#include <cassert>
 
 #define DBL_MAX 1.7976931348623158e+308 
 #define FROZEN_VALUE 0
@@ -79,8 +81,10 @@ void ScFlipFanoDecoder::DecodeFrom(int rootIndex) {
 	
 	int j = rootIndex;
 	int i = 0;
-	if (j >= 0)
+	if (j >= 0) {
 		i = _A[j] + 1;
+                assert(_maskWithCrc[_A[j]]);
+        }
 
 	bool B = false;
 	double T = _T;

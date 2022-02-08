@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
+#include <cassert>
 
 #include "../include/PolarCode.h"
 #include "../include/ScDecoder.h"
@@ -77,7 +78,7 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inLLR) {
 
 	size_t n = inLLR.size();
 	size_t m = _codePtr->m();
-	size_t k = _codePtr->k();
+	size_t k = _codePtr->kExt();
 	for (size_t i = 0; i < n; i++)
 		_beliefTree[0][i] = inLLR[i];
 
@@ -87,7 +88,7 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inLLR) {
 	std::vector<double> beta(k, 0.0); // only for frozen bits
 	std::vector<double> metrics(n, 0); // for all bits
 	std::vector<bool> gamma(k, 0);
-	std::vector<int> A = _codePtr->UnfrozenBits(); // info set
+	std::vector<int> A = _codePtr->UnfrozenBitsWithCrc(); // info set
 	double T = _T;
 	double delta = _delta;
 	int iterationsCount = 0;
@@ -103,6 +104,7 @@ std::vector<int> ScFanoDecoder::Decode(std::vector<double> inLLR) {
 	}
 	while (i < n)
 	{
+                if (j>= 0 && j + 2 < k) assert(i > A[j] && i <= A[j+1]);
 		iterationsCount++;
 		PassDown(i); // get p1 metric in _beliefTree[m][i]
 		/* double p0 = 1 - _beliefTree[m][i]; */
