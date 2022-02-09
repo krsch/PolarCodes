@@ -46,14 +46,13 @@ void ScFlipFanoDecoder::UpdateT(double & T, double & tau) {
 }
 
 void ScFlipFanoDecoder::BackwardMove(double & T, bool & B, int & j, int rootIndex) {
-
 	while (true) {
 		double mu = 0;
 
 		if (j <= rootIndex)
 			mu = -1000;
 
-		if (j >= 1) // or the rootIndex, mmm?
+		if (j > rootIndex + 1) // or the rootIndex, mmm?
 			mu = _beta[j - 1];
 
 		if (mu >= T) {
@@ -128,41 +127,35 @@ void ScFlipFanoDecoder::DecodeFrom(int rootIndex) {
 					i++;
 					j++;
 				}
+				else if (min > T) {
+					_x[i] = argmin;
+					_uhatTree[m][i] = _x[i];
+					PassUp(i);
+
+					_metrics[i] = min;
+					_beta[j + 1] = min;
+					_gamma[j + 1] = true;
+					B = false;
+
+					i++;
+					j++;
+				}
 				else {
-					if (min > T) {
-						_x[i] = argmin;
-						_uhatTree[m][i] = _x[i];
-						PassUp(i);
-
-						_metrics[i] = min;
-						_beta[j + 1] = min;
-						_gamma[j + 1] = true;
+					if (j == rootIndex) {
+						T = T - _delta;
 						B = false;
-
-						i++;
-						j++;
 					}
 					else {
-						if (j == rootIndex) {
-							T = T - _delta;
-							B = false;
-						}
-						else {
-							BackwardMove(T, B, j, rootIndex);
-							i = _A[j + 1];
-						}
+						BackwardMove(T, B, j, rootIndex);
+						i = _A[j + 1];
 					}
 				}
 			}
+			else if (j == rootIndex)
+				T = T - _delta;
 			else {
-				if (j == rootIndex)
-					T = T - _delta;
-
-				else {
-					BackwardMove(T, B, j, rootIndex);
-					i = _A[j + 1];
-				}
-
+				BackwardMove(T, B, j, rootIndex);
+				i = _A[j + 1];
 			}
 		}
 		else {
