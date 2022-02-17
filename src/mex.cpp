@@ -59,6 +59,16 @@ void mex(mexbind0x::MXCommands & m) {
 				new ScStackOptimizedDecoder(code, L, D));
 		});
 	m.on("decode", &BaseDecoder::Decode);
+	m.on("decode flip", [](BaseDecoder * decoder, std::vector<double> belief, int flip_pos, bool flip_value) {
+		if (auto creeper = dynamic_cast<ScCreeperDecoder *>(decoder))
+			return creeper->Decode(std::move(belief), flip_pos, flip_value);
+		throw std::invalid_argument("Only creeper supports flip");
+	});
+        m.on("get metric", [](BaseDecoder * decoder) {
+		if (auto creeper = dynamic_cast<ScCreeperDecoder *>(decoder))
+			return creeper->GetMetric();
+		throw std::invalid_argument("Only creeper supports get metric");
+        });
 	m.on("encode", [](PolarCode * code, std::vector<int> word) {
 		Encoder enc(code);
 		return enc.Encode(word);
@@ -73,8 +83,8 @@ void mex(mexbind0x::MXCommands & m) {
                                        op_count.Xors);
 	});
 	m.on("clear op count", [](BaseDecoder * decoder) {
-            decoder->ClearOperationsCount();
-        });
+		decoder->ClearOperationsCount();
+	});
 	if (!m.has_matched())
 		throw std::invalid_argument("Command not found");
 }

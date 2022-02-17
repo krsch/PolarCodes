@@ -86,6 +86,10 @@ void ScCreeperDecoder::LoadPath(int length, int lastBit) {
 }
 
 std::vector<int> ScCreeperDecoder::Decode(std::vector<double> belief) {
+	return Decode(std::move(belief), -1, false);
+}
+
+std::vector<int> ScCreeperDecoder::Decode(std::vector<double> belief, int flip_pos, bool flip_value) {
 	// local variables
 	int next_bit_pos = 0;
 	bool isPathSwitched = false;
@@ -151,12 +155,12 @@ std::vector<int> ScCreeperDecoder::Decode(std::vector<double> belief) {
 		recursively_calc_alpha_creeper(0, next_bit_pos, isPathSwitched);
 		pm0 = ((next_bit_pos != 0) ? _metric[next_bit_pos - 1] : 0)
 			+ calculate_step_metric_fano(_alpha[0][0], 0, p[next_bit_pos]);
+		pm1 = ((next_bit_pos != 0) ? _metric[next_bit_pos - 1] : 0)
+			+ calculate_step_metric_fano(_alpha[0][0], 1, p[next_bit_pos]);
 
-		if (_mask[next_bit_pos]) {
+		if (_mask[next_bit_pos] && next_bit_pos != flip_pos) {
 			T = Q(_TP[1], _delta);
 			
-			pm1 = ((next_bit_pos != 0) ? _metric[next_bit_pos - 1] : 0)
-				+ calculate_step_metric_fano(_alpha[0][0], 1, p[next_bit_pos]);
 
 			if (pm0 > pm1) {
 				mx = pm0;
@@ -243,6 +247,10 @@ std::vector<int> ScCreeperDecoder::Decode(std::vector<double> belief) {
 					}
 				}
 			}
+		}
+		else if (next_bit_pos == flip_pos) {
+			n_current = { next_bit_pos, flip_value };
+			_metric[next_bit_pos] = flip_value ? pm1 : pm0;
 		}
 		else {
 			n_current = { next_bit_pos, 0 };

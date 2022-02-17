@@ -30,6 +30,12 @@ methods
     function result = step(obj, word)
         result = polar_decoder('decode', obj.ptr, word);
     end
+    function result = decode_flip(obj, word, flip_pos, flip_val)
+        result = polar_decoder('decode flip', obj.ptr, word, flip_pos, flip_val);
+    end
+    function result = metric(obj)
+        result = polar_decoder('get metric', obj.ptr);
+    end
     function result = encode(obj, word)
         result = polar_decoder('encode', obj.code, word);
     end

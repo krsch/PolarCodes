@@ -27,6 +27,8 @@ public:
 	ScCreeperDecoder(PolarCode * codePtr, double delta);
 
 	std::vector<int> Decode(std::vector<double> llr) override;
+	std::vector<int> Decode(std::vector<double> llr, int flip_pos, bool flip_value);
+	std::vector<double> GetMetric() const { return _metric; }
 
 	~ScCreeperDecoder() = default;
 };
